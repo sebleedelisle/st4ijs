@@ -18,17 +18,16 @@ process.on('SIGINT', function () {
 var offset = 0;
 setInterval(function () {
 	for (var i = 0; i < NUM_LEDS; i++) {
-		var colour = Colour().hsl((offset + i), 100, 50).rgb(); 
+		var colour = Colour().hsl((offset + (i*10))%360, 100, 80).rgb(); 
 		pixelData[i] = rgb2Int(colour)
-		if(i==0) console.log(colour); 
 	}
-	offset++;
+	offset+=5;
 	ws281x.render(pixelData);
 }, 1000 / 30);
 
 console.log('Press <ctrl>+C to exit.');
 
 function rgb2Int(col) {
-	var r = col[0], g=col[1], b=col[2]; 
-	return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+	with (col) 
+		return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
